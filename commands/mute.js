@@ -4,10 +4,13 @@ const sleep = require('util').promisify(setTimeout);
 module.exports.run = async (bot, message, args) => {
 
     let tomute = message.mentions.members.first() || message.guild.members.get(args[0]);
-    if(message.deletable)
-        await message.delete();
+    if(!message.deleted) {
+        try {
+            message.delete();
+        } catch (e) { }
+    }
 
-    if (!message.member.hasPermission("MUTE_MEMBERS")) return message.channel.send("**ERROR:** You do not have permission to do this.").then(msg => {
+    if (!message.member.hasPermission("MUTE_MEMBERS")) return await message.channel.send("**ERROR:** You do not have permission to do this.").then(msg => {
         msg.delete(10000)
     });
 
@@ -16,29 +19,23 @@ module.exports.run = async (bot, message, args) => {
         timeString = "5m";
 
     let mReason = args.slice(2).join(" ");
-    if (!mReason) //return message.channel.send("**ERROR:** No reason provided for muting " + (tomute)).then(msg => {msg.delete(5000)});
+    if (!mReason)
         mReason = "No reason specified";
 
-    if (!tomute) return message.channel.send("**ERROR:** User not found! Make sure you are @mentioning them!").then(msg => {
+    if (!tomute) return await message.channel.send("**ERROR:** User not found! Make sure you are @mentioning them!").then(msg => {
         msg.delete(10000)
     });
-
-    //if(tomute.hasPermission("ADMINISTRATOR")) return message.channel.send("**ERROR:** That user cannot be muted!").then(msg => {msg.delete(5000)});
-
 
     let muterole = message.guild.roles.get("405506751149113355");
-    //let crankedRole = message.guild.roles.find(`name`, "Cranked");
 
-    //tomute.removeRole(crankedRole);
-
-    if (!muterole) return message.channel.send("**Please create a role called `muted` and turn off `Send Messages` and `Add Reactions` for that role.**").then(msg => {
+    if (!muterole) return await message.channel.send("**Please create a role called `muted` and turn off `Send Messages` and `Add Reactions` for that role.**").then(msg => {
         msg.delete(10000)
     });
 
-    await(tomute.addRole(muterole.id));
+    await(tomute.addRole(muterole.id, mReason));
     await(tomute.setMute(true, mReason));
 
-    message.channel.send(`**<@${tomute.id}> has been muted for ${timeString}!**`).then(msg => {
+    await message.channel.send(`**<@${tomute.id}> has been muted for ${timeString}!**`).then(msg => {
         msg.delete(30000)
     });
 
@@ -55,12 +52,11 @@ module.exports.run = async (bot, message, args) => {
         .setFooter('When');
 
     let tmChannel = message.guild.channels.get("361172650657185817");
-    if (!tmChannel) return message.channel.send("**Please create a channel called `mod-logs` and send Fyrlex#2740 the channel ID!**").then(msg => {
+    if (!tmChannel) return await message.channel.send("**Please create a channel called `mod-logs` and send Fyrlex#2740 the channel ID!**").then(msg => {
         msg.delete(10000)
     });
 
-    tmChannel.send(tmEmbed);
-
+    await tmChannel.send(tmEmbed);
 
     /// UNMUTE
     let time = stringToDuration(timeString);
@@ -72,7 +68,7 @@ module.exports.run = async (bot, message, args) => {
         await(tomute.setMute(false, "Auto unmuting"));
         await(tomute.removeRole(muterole.id));
 
-        message.channel.send(`**<@${tomute.id}> has been auto-unmuted.**`).then(msg => {
+        await message.channel.send(`**<@${tomute.id}> has been auto-unmuted.**`).then(msg => {
             msg.delete(30000)
         });
 
@@ -82,11 +78,10 @@ module.exports.run = async (bot, message, args) => {
             .setColor("#33333a")
             .addField("Unmuted User", `${tomute} with ID: ${tomute.id}`)
             .addField("Auto-unmuted By", `${message.author} with ID: ${message.author.id}`)
-            //.addField("Reason", mReason)
             .setTimestamp()
             .setFooter('When');
 
-        tmChannel.send(tumEmbed);
+        await tmChannel.send(tumEmbed);
     }
 };
 
@@ -94,7 +89,7 @@ module.exports.help = {
     name: "mute"
 };
 
-const regex = /(?<amount>[0-9]+)(?<frequency>(second|minute|hour|day)[s]?|[smhd])/ig;
+const regex = /(?<amount>[0-9]+)(?<frequency>(second|minute|hour|day)[s]?|[smhd])/i;
 
 function stringToDuration(input) {
     let matched = regex.exec(input);
