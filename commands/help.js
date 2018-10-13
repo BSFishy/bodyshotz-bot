@@ -16,9 +16,10 @@ module.exports.run = async (bot, message, args) => {
         .addField("!website", "Website link", true)
         .addField("!youtube", "YouTube link", true);
 
-    message.channel.send(hEmbed).then(msg => {
-        msg.delete(20000)
-    })
+    message.channel.send(hEmbed)
+        //.then(msg => {
+        //msg.delete(20000)
+    //})
 };
 
 module.exports.help = {
