@@ -2,7 +2,11 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
 
-    message.delete();
+    if(!message.deleted) {
+        try {
+            message.delete();
+        } catch (e) { }
+    }
 
     let tomute = message.mentions.members.first() || message.guild.members.get(args[0]);
 
