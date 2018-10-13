@@ -90,7 +90,7 @@ module.exports.help = {
 };
 
 //const regex = /(?<amount>[0-9]+)(?<frequency>(second|minute|hour|day)[s]?|[smhd])/i;
-const regex = new RegExp("(?<amount>[0-9]+)(?<frequency>(second|minute|hour|day)[s]?|[smhd])", "i");
+const regex = /([0-9]+)((second|minute|hour|day)[s]?|[smhd])/i;
 
 function stringToDuration(input) {
     let matched = regex.exec(input);
@@ -99,9 +99,8 @@ function stringToDuration(input) {
     if(matched === null)
         return 5 * 60 * 1000;
 
-    let groups = matched.groups;
-    let amount = groups["amount"];
-    let frequency = groups["frequency"];
+    let amount = matched[1];
+    let frequency = matched[2];
 
     switch (frequency.toLowerCase()) {
         case "s" || "second" || "seconds":
