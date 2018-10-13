@@ -21,13 +21,10 @@ module.exports.run = async (bot, message, args) => {
     let muterole = message.guild.roles.get("361168852257734658");
     let unmuted = false;
 
-    if(tomute.roles.keyArray().includes(muterole.id)) {
+    if(tomute.serverMute || tomute.roles.keyArray().includes(muterole.id)) {
         await tomute.removeRole(muterole.id);
-        unmuted = true;
-    }
-
-    if(tomute.serverMute){
         await tomute.setMute(false, "Manual unmute");
+
         unmuted = true;
     }
 
