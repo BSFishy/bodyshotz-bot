@@ -8,7 +8,7 @@
     "start": "node index.js"
   },
   "enginges": {
-    "node": "8.x"
+    "node": "10.12.0"
   },
   "author": "Fyrlex#2740",
   "license": "ISC",
