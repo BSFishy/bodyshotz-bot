@@ -1,9 +1,9 @@
 // Keep bot running
 
-const http = require('http');
-const express = require('express');
+const http = require("http");
+const express = require("express");
 const app = express();
-let child_process = require('child_process');
+let child_process = require("child_process");
 let d = Date(Date.now());
 let date = d.toString();
 
@@ -13,7 +13,7 @@ app.get("/", (request, response) => {
 });
 app.listen(process.env.PORT);
 setInterval(() => {
-    child_process.exec('refresh', function (error, stdout) {
+    child_process.exec("refresh", function (error, stdout) {
         console.log(stdout);
     });
     http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
@@ -68,19 +68,19 @@ fs.readdir("./commands/", (err, files) => {
 
 //----------------------------------------------------------
 //autorole
-bot.on('guildMemberAdd', member => {
+bot.on("guildMemberAdd", member => {
 
     let role = member.guild.roles.get("361168852257734658");
 
-    member.addRole(role)
+    member.addRole(role);
 
 });
 
 bot.on("ready", async () => {
 
-    console.log(`I am now up!`);
+    console.log("I am now up!");
 
-    bot.user.setActivity("!help")
+    bot.user.setActivity("!help");
 });
 
 //----------------------------------------------------------

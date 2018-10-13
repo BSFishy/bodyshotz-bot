@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const sleep = require('util').promisify(setTimeout);
+const sleep = require("util").promisify(setTimeout);
 
 module.exports.run = async (bot, message, args) => {
 
@@ -7,11 +7,13 @@ module.exports.run = async (bot, message, args) => {
     if(!message.deleted) {
         try {
             message.delete();
-        } catch (e) { }
+        } catch (e) {
+            console.log(`Could not delete message: ${message}`);
+        }
     }
 
     if (!message.member.hasPermission("MUTE_MEMBERS")) return await message.channel.send("**ERROR:** You do not have permission to do this.").then(msg => {
-        msg.delete(10000)
+        msg.delete(10000);
     });
 
     let timeString = args[1];
@@ -23,20 +25,20 @@ module.exports.run = async (bot, message, args) => {
         mReason = "No reason specified";
 
     if (!tomute) return await message.channel.send("**ERROR:** User not found! Make sure you are @mentioning them!").then(msg => {
-        msg.delete(10000)
+        msg.delete(10000);
     });
 
     let muterole = message.guild.roles.get("405506751149113355");
 
     if (!muterole) return await message.channel.send("**Please create a role called `muted` and turn off `Send Messages` and `Add Reactions` for that role.**").then(msg => {
-        msg.delete(10000)
+        msg.delete(10000);
     });
 
     await(tomute.addRole(muterole.id, mReason));
     await(tomute.setMute(true, mReason));
 
     await message.channel.send(`**<@${tomute.id}> has been muted for ${timeString}!**`).then(msg => {
-        msg.delete(30000)
+        msg.delete(30000);
     });
 
     let sicon = bot.user.displayAvatarURL;
@@ -49,11 +51,11 @@ module.exports.run = async (bot, message, args) => {
         .addField("Muted By", `${message.author} with ID: ${message.author.id}`)
         .addField("Reason", mReason)
         .setTimestamp()
-        .setFooter('When');
+        .setFooter("When");
 
     let tmChannel = message.guild.channels.get("361172650657185817");
     if (!tmChannel) return await message.channel.send("**Please create a channel called `mod-logs` and send Fyrlex#2740 the channel ID!**").then(msg => {
-        msg.delete(10000)
+        msg.delete(10000);
     });
 
     await tmChannel.send(tmEmbed);
@@ -69,7 +71,7 @@ module.exports.run = async (bot, message, args) => {
         await(tomute.removeRole(muterole.id));
 
         await message.channel.send(`**<@${tomute.id}> has been auto-unmuted.**`).then(msg => {
-            msg.delete(30000)
+            msg.delete(30000);
         });
 
         let tumEmbed = new Discord.RichEmbed()
@@ -79,7 +81,7 @@ module.exports.run = async (bot, message, args) => {
             .addField("Unmuted User", `${tomute} with ID: ${tomute.id}`)
             .addField("Auto-unmuted By", `${message.author} with ID: ${message.author.id}`)
             .setTimestamp()
-            .setFooter('When');
+            .setFooter("When");
 
         await tmChannel.send(tumEmbed);
     }
@@ -103,21 +105,21 @@ function stringToDuration(input) {
     let frequency = matched[2];
 
     switch (frequency.toLowerCase()) {
-        case "s" || "second" || "seconds":
-            time = amount;
-            break;
-        case "m" || "minute" || "minutes":
-            time = amount * 60;
-            break;
-        case "h" || "hour" || "hours":
-            time = amount * 60 * 60;
-            break;
-        case "d" || "day" || "days":
-            time = amount * 60 * 60 * 24;
-            break;
-        default:
-            time = 5 * 60;
-            break;
+    case "s" || "second" || "seconds":
+        time = amount;
+        break;
+    case "m" || "minute" || "minutes":
+        time = amount * 60;
+        break;
+    case "h" || "hour" || "hours":
+        time = amount * 60 * 60;
+        break;
+    case "d" || "day" || "days":
+        time = amount * 60 * 60 * 24;
+        break;
+    default:
+        time = 5 * 60;
+        break;
     }
 
     return time * 1000;

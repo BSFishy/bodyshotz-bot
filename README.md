@@ -1,4 +1,4 @@
-BodyShotZ Bot [![Build Status][build status]][build status img] [![Discord][discord]][discord shield]
+BodyShotZ Bot [![Build Status][build status]][build status img] [![Known Vulnerabilities][snyk img]][snyk link] [![Discord][discord]][discord shield]
 =================
 Welcome to the official repository for the BodyShotZ Bot. This is the bot used in the BodyShotZ Clan discord, origianally made by
 Fyrlex#2740, though this repository has some vast differences from the original bot. Though it is technically possible,
@@ -23,3 +23,5 @@ Made by [the BodyShotZ Clan][discord]
  [build status img]: https://travis-ci.org/BSFishy/bodyshotz-bot
  [discord]: https://discord.gg/CWETNzs
  [discord shield]: https://img.shields.io/badge/Invite-Discord-blue.png?longCache=true&style=flat
+ [snyk link]: https://snyk.io/test/github/BSFishy/bodyshotz-bot?targetFile=package.json
+ [snyk img]: https://snyk.io/test/github/BSFishy/bodyshotz-bot/badge.svg?targetFile=package.json
