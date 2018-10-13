@@ -15,17 +15,22 @@ module.exports.run = async (bot, message, args) => {
     });
 
     let muterole = message.guild.roles.get("361168852257734658");
+    let unmuted = false;
 
     if(tomute.roles.keyArray().includes(muterole.id)) {
         await tomute.removeRole(muterole.id);
-
-        message.channel.send(`**<@${tomute.id}> has been unmuted!**`).then(msg => {
-            msg.delete(10000)
-        })
+        unmuted = true;
     }
 
     if(tomute.serverMute){
         await tomute.setMute(false, "Manual unmute");
+        unmuted = true;
+    }
+
+    if(unmuted) {
+        message.channel.send(`**<@${tomute.id}> has been unmuted!**`).then(msg => {
+            msg.delete(10000)
+        });
     }
 
     let tmChannel = message.guild.channels.get("361172650657185817");
