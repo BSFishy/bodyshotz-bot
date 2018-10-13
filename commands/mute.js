@@ -89,7 +89,8 @@ module.exports.help = {
     name: "mute"
 };
 
-const regex = /(?<amount>[0-9]+)(?<frequency>(second|minute|hour|day)[s]?|[smhd])/i;
+//const regex = /(?<amount>[0-9]+)(?<frequency>(second|minute|hour|day)[s]?|[smhd])/i;
+const regex = new RegExp("(?<amount>[0-9]+)(?<frequency>(second|minute|hour|day)[s]?|[smhd])", "i");
 
 function stringToDuration(input) {
     let matched = regex.exec(input);
