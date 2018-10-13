@@ -5,36 +5,40 @@ module.exports.run = async (bot, message, args) => {
     if(!message.deleted) {
         try {
             message.delete();
-        } catch (e) { }
+        } catch (e) {
+            console.log(`Could not delete message: ${message}`);
+        }
     }
 
     let tomute = message.mentions.members.first() || message.guild.members.get(args[0]);
 
     if (!tomute) return message.channel.send("**ERROR:** User not found! Make sure you are @mentioning them!").then(msg => {
-        msg.delete(5000)
+        msg.delete(5000);
     });
 
     if (!message.member.hasPermission("MUTE_MEMBERS")) return message.channel.send("**ERROR:** You do not have permission to do this.").then(msg => {
-        msg.delete(5000)
+        msg.delete(5000);
     });
 
     let muterole = message.guild.roles.get("361168852257734658");
+    let unmuted = false;
 
-    if(tomute.roles.keyArray().includes(muterole.id)) {
+    if(tomute.serverMute || tomute.roles.keyArray().includes(muterole.id)) {
         await tomute.removeRole(muterole.id);
+        await tomute.setMute(false, "Manual unmute");
 
-        message.channel.send(`**<@${tomute.id}> has been unmuted!**`).then(msg => {
-            msg.delete(10000)
-        })
+        unmuted = true;
     }
 
-    if(tomute.serverMute){
-        await tomute.setMute(false, "Manual unmute");
+    if(unmuted) {
+        message.channel.send(`**<@${tomute.id}> has been unmuted!**`).then(msg => {
+            msg.delete(10000);
+        });
     }
 
     let tmChannel = message.guild.channels.get("361172650657185817");
     if (!tmChannel) return message.channel.send("**Please create a channel called `mod-logs` and send Fyrlex#2740 the channel ID!**").then(msg => {
-        msg.delete(5000)
+        msg.delete(5000);
     });
 
     let sicon = bot.user.displayAvatarURL;
@@ -46,7 +50,7 @@ module.exports.run = async (bot, message, args) => {
         .addField("Manually unmuted By", `${message.author} with ID: ${message.author.id}`)
         //.addField("Reason", mReason)
         .setTimestamp()
-        .setFooter('When');
+        .setFooter("When");
 
     tmChannel.send(tumEmbed);
 };
