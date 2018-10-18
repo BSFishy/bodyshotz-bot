@@ -13,7 +13,7 @@ Additionally, you can test the bot out, durring development, by creating your ow
 variable, with the name `TOKEN`, and another environment variable called `PORT` with whatever port you want the webserver
 to be on.
 
-Made by [the BodyShotZ Clan][discord]
+Made by [the BodyShotZ Clan][discord link]
 -------------------
 
 \ ゜o゜)ノ

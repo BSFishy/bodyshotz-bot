@@ -26,23 +26,22 @@ setInterval(() => {
 const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
 
-// const serverStats = {
-//   botCountID: '',
-//   memberCountID: '',
-//   totalUsersID: '',
-//   onlineUsersID: ''
-// };
-
 const fs = require("fs");
 const bot = new Discord.Client({
     disableEveryone: true
 });
 
+let guild = undefined;
+let devBot = undefined;
+
+//console.log(bot.guilds.keyArray().join(", "));
+//const guild = bot.guilds.get("319947092833337344");
+//if(guild === undefined) console.log("undefined");
+//const devBot = guild.members.get("500713287516815376");
+
 //----------------------------------------------------------
 
 // Data
-//let messageData = JSON.parse(fs.readFileSync("Data/messagesData.json", "utf8"));
-//let serverData = JSON.parse(fs.readFileSync("Data/serverData.json", "utf8"));
 bot.commands = new Discord.Collection();
 
 
@@ -86,6 +85,10 @@ bot.on("ready", async () => {
 //----------------------------------------------------------
 
 bot.on("message", async message => {
+    if(guild === undefined) guild = message.guild;
+    if(devBot === undefined) devBot = guild.members.get("500713287516815376");
+
+    if(devBot.presence.status !== "offline" && devBot.id !== bot.user.id) return;
 
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
