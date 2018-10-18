@@ -88,7 +88,7 @@ bot.on("message", async message => {
     if(guild === undefined) guild = message.guild;
     if(devBot === undefined) devBot = guild.members.get("500713287516815376");
 
-    if(devBot.presence.status !== "offline") return;
+    if(devBot.presence.status !== "offline" && devBot.id !== bot.user.id) return;
 
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
