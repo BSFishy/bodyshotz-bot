@@ -24,46 +24,53 @@ setInterval(() => {
 
 // Requires
 const botconfig = require("./botconfig.json");
-const Discord = require("discord.js");
+//const Discord = require("discord.js");
+const { CommandoClient } = require("discord.js-commando");
+const path = require("path");
 
-const fs = require("fs");
-const bot = new Discord.Client({
+//const fs = require("fs");
+const bot = new CommandoClient({
+    owner: "181904634065977345",
     disableEveryone: true
 });
 
 let guild = undefined;
 let devBot = undefined;
 
-//console.log(bot.guilds.keyArray().join(", "));
-//const guild = bot.guilds.get("319947092833337344");
-//if(guild === undefined) console.log("undefined");
-//const devBot = guild.members.get("500713287516815376");
-
 //----------------------------------------------------------
 
 // Data
-bot.commands = new Discord.Collection();
+//bot.commands = new Discord.Collection();
+
+bot.registry
+    .registerDefaultTypes()
+    // .registerGroups([
+    //     ["group1", "Our First Command Group"]
+    // ])
+    .registerDefaultGroups()
+    .registerDefaultCommands()
+    .registerCommandsIn(path.join(__dirname, "commands"));
 
 
 // Get commands from commands folder
 
-fs.readdir("./commands/", (err, files) => {
-
-    if (err) console.log(err);
-
-    // Log commands
-    let jsfile = files.filter(f => f.split(".").pop() === "js");
-    if (jsfile.length <= 0) {
-        console.log("There are no commands to load...");
-        return;
-    }
-
-    jsfile.forEach((f) => {
-        let props = require(`./commands/${f}`);
-        console.log(`${f} loaded!`);
-        bot.commands.set(props.help.name, props);
-    });
-});
+// fs.readdir("./commands/", (err, files) => {
+//
+//     if (err) console.log(err);
+//
+//     // Log commands
+//     let jsfile = files.filter(f => f.split(".").pop() === "js");
+//     if (jsfile.length <= 0) {
+//         console.log("There are no commands to load...");
+//         return;
+//     }
+//
+//     jsfile.forEach((f) => {
+//         let props = require(`./commands/${f}`);
+//         console.log(`${f} loaded!`);
+//         bot.commands.set(props.help.name, props);
+//     });
+// });
 
 //----------------------------------------------------------
 //autorole
