@@ -1,9 +1,9 @@
 // Keep bot running
 
-const http = require("http");
+//const http = require("http");
 const express = require("express");
 const app = express();
-let child_process = require("child_process");
+//let child_process = require("child_process");
 let d = Date(Date.now());
 let date = d.toString();
 
@@ -12,18 +12,18 @@ app.get("/", (request, response) => {
     response.sendStatus(200);
 });
 app.listen(process.env.PORT);
-setInterval(() => {
-    child_process.exec("refresh", function (error, stdout) {
-        console.log(stdout);
-    });
-    http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-}, 900000);
+// setInterval(() => {
+//     child_process.exec("refresh", function (error, stdout) {
+//         console.log(stdout);
+//     });
+//     http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+// }, 900000);
 
 //----------------------------------------------------------
 
 
 // Requires
-const botconfig = require("./botconfig.json");
+//const botconfig = require("./botconfig.json");
 //const Discord = require("discord.js");
 const { CommandoClient } = require("discord.js-commando");
 const path = require("path");
@@ -34,8 +34,8 @@ const bot = new CommandoClient({
     disableEveryone: true
 });
 
-let guild = undefined;
-let devBot = undefined;
+//let guild = undefined;
+//let devBot = undefined;
 
 //----------------------------------------------------------
 
@@ -44,11 +44,15 @@ let devBot = undefined;
 
 bot.registry
     .registerDefaultTypes()
-    // .registerGroups([
-    //     ["group1", "Our First Command Group"]
-    // ])
+    .registerGroups([
+        ["fun", "Fun"],
+        ["links", "Links"],
+        ["moderation", "Moderation"],
+    ])
     .registerDefaultGroups()
-    .registerDefaultCommands()
+    .registerDefaultCommands({
+        help: false
+    })
     .registerCommandsIn(path.join(__dirname, "commands"));
 
 
@@ -91,29 +95,29 @@ bot.on("ready", async () => {
 
 //----------------------------------------------------------
 
-bot.on("message", async message => {
-    if(guild === undefined) guild = message.guild;
-    if(devBot === undefined) devBot = guild.members.get("500713287516815376");
-
-    if(devBot.presence.status !== "offline" && devBot.id !== bot.user.id) return;
-
-    if (message.author.bot) return;
-    if (message.channel.type === "dm") return;
-
-    if (message.member.roles.keyArray().includes("405506751149113355")) {
-        await message.delete();
-        return;
-    }
-
-    let prefix = botconfig.prefix;
-    if (!message.content.startsWith(prefix)) return;
-    let messageArray = message.content.split(" ");
-    let cmd = messageArray[0];
-    let args = messageArray.slice(1);
-
-    let commandfile = bot.commands.get(cmd.slice(prefix.length));
-    if (commandfile) commandfile.run(bot, message, args);
-
-});
+// bot.on("message", async message => {
+//     if(guild === undefined) guild = message.guild;
+//     if(devBot === undefined) devBot = guild.members.get("500713287516815376");
+//
+//     if(devBot.presence.status !== "offline" && devBot.id !== bot.user.id) return;
+//
+//     if (message.author.bot) return;
+//     if (message.channel.type === "dm") return;
+//
+//     if (message.member.roles.keyArray().includes("405506751149113355")) {
+//         await message.delete();
+//         return;
+//     }
+//
+//     let prefix = botconfig.prefix;
+//     if (!message.content.startsWith(prefix)) return;
+//     let messageArray = message.content.split(" ");
+//     let cmd = messageArray[0];
+//     let args = messageArray.slice(1);
+//
+//     let commandfile = bot.commands.get(cmd.slice(prefix.length));
+//     if (commandfile) commandfile.run(bot, message, args);
+//
+// });
 
 bot.login(process.env.TOKEN);

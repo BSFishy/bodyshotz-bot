@@ -15,7 +15,8 @@
   "dependencies": {
     "discord.js": "11.4.2",
     "discord.js-commando": "0.10.0",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "common-tags": "latest"
   },
   "devDependencies": {
     "eslint": "^5.7.0",
